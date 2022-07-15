@@ -1,0 +1,23 @@
+name: "Reload Ansible playbook"
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reload Ansible playbook
+        id: reload-playbook
+        uses: cloudify-cosmo/cli-action@v1.2
+        with:
+          command:
+            executions start -d $DEPLOYMENT_ID -p "playbook_source_path=https://github.com/acritelli/demo-ansible-reload/archive/refs/heads/main.zip;playbook_path=site.yaml;timeout=900" reload_ansible_playbook
+env:
+  DEPLOYMENT_ID: demo
+  CLOUDIFY_HOST: ${{ secrets.CLOUDIFY_HOST }}
+  CLOUDIFY_USERNAME: ${{ secrets.CLOUDIFY_USERNAME }}
+  CLOUDIFY_PASSWORD: ${{ secrets.CLOUDIFY_PASSWORD }}
+  CLOUDIFY_TENANT: default_tenant
+  CLOUDIFY_SSL: ${{ secrets.CLOUDIFY_SSL }}
+  CLOUDIFY_SSL_TRUST_ALL: ${{ secrets.CLOUDIFY_SSL_TRUST_ALL }}
